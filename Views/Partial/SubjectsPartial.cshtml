@@ -1,0 +1,18 @@
+﻿@model List<WorkFollow.Models.SubjectEntities>
+
+@foreach (var item in Model)
+{
+    <tr data-toggle="collapse" data-target="@("#Answer-"+item.Id.ToString())">
+        <input type="hidden" class="SubjectId" value="@item.Id" />
+        <td> @item.Title </td>
+        <td> @item.Date </td>
+        <td>
+            <button type="button" class="btn"> <i class="fa fa fa-eye"></i> Cevaplar  </button>
+
+        </td>
+    </tr>
+    <tr id="@("Answer-"+item.Id.ToString())" class="collapse cell-1 row-child">
+
+        <td colspan="3"> <div style="width:100%" id="@("collapseme-"+item.Id.ToString())"></div></td>
+    </tr>
+}

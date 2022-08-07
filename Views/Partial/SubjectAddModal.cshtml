@@ -1,0 +1,59 @@
+﻿<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Konu Ekle</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            @using (Html.BeginForm("SubjectAdds", "Home", FormMethod.Post,new{id="FormData"}))
+            {
+                <form>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+
+                        <div class="form-row">
+                            <div class="col">
+                                <label for="validationDefault01">İsim</label>
+                                <input type="text" class="form-control" id="validationDefault01" name="Name" placeholder="İsim" required>
+                            </div>
+                            <div class="col">
+                                <label for="validationDefault02">Soyisim</label>
+                                <input type="text" class="form-control" id="validationDefault02" name="Surname" placeholder="Soyisim" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col">
+                                <label for="validationDefaultMail">E-Posta</label>
+                                <input type="text" class="form-control" id="validationDefaultMail" name="Email" placeholder="E-Posta">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col">
+                                <label for="validationDefaultTitle">Konu Başlığı</label>
+                                <input type="text" class="form-control" id="validationDefaultTitle" name="Title" placeholder="Konu Başlığı">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <label for="validationDefaultContent">Konu İçeriği</label>
+                                <textarea class="form-control" id="validationDefaultContent" name="Content" placeholder="Konu İçeriği"></textarea>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" form="FormData">Ekle</button>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+</div>

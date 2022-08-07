@@ -1,0 +1,77 @@
+﻿@model List<WorkFollow.Models.AnswerEntities>
+
+@if (Model.FirstOrDefault().Name != null)
+{
+    foreach (var item in Model)
+    {
+        <div class="container">
+            <span style="font-size:10px;">
+                <i class="fa fa-user"></i>@Html.DisplayFor(modelItem => item.Email)&nbsp;&nbsp;
+                <h4>
+                    @Html.DisplayFor(modelItem => item.Name)&nbsp;
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </h4>
+            </span>
+
+            <div class="panel panel-default">
+                <div class="panel-body"> @Html.DisplayFor(modelItem => item.Content)</div>
+            </div>
+        </div>
+    }
+}
+
+
+
+<div class="container">
+
+    <div class="form-row">
+        <div class="col">
+            <label for="validationDefault01">İsim</label>
+            <input type="text" class="form-control" id="Name" name="Name" placeholder="İsim" required>
+            <input type="hidden" class="form-control" id="SubjectId" name="SubjectId" value="@Model.FirstOrDefault().SubjectId" placeholder="İsim">
+        </div>
+        <div class="col">
+            <label for="validationDefault02">Soyisim</label>
+            <input type="text" class="form-control" id="Surname" name="Surname" placeholder="Soyisim" required>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col">
+            <label for="validationDefaultMail">E-Posta</label>
+            <input type="text" class="form-control" id="Email" name="Email" placeholder="E-Posta">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col">
+            <label for="validationDefaultTitle">Cevap</label>
+            <input type="text" class="form-control" id="Content" name="Content" placeholder="Cevap">
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" id="answerBtn">Ekle</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#answerBtn").click(function() {
+
+            let data = {
+                Name:$("#Name").val(),
+                Surname:$("#Surname").val(),
+                Email:$("#Email").val(),
+                Content:$("#Content").val(),
+                SubjectId:$("#SubjectId").val(),
+            }
+
+            $.post("Home/AnswersAdds/",data,function(dataPartial) {
+                $('#collapseme-' + data.SubjectId).html(dataPartial);
+            });
+        });
+
+    });
+
+</script>

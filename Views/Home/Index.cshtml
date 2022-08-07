@@ -1,0 +1,114 @@
+﻿@model WorkFollow.Models.Pagenation
+
+
+<style>
+
+        tr.collapse.in {
+        display: table-row !important;
+    }
+
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" data-toggle="modal" data-target="#myModal" aria-label="Add">
+                        <i class="fa fa fa-plus"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-6">
+            <ul class="pagination" style="float:right">
+                <li class="page-item">
+                    <a class="page-link" id="end-1" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                @for (int i = 1; i <= Model.PageCount; i++)
+                {
+                    <li class="page-item"><a id="@("a-"+@i)" class="page-link" href="#">@i</a></li>
+                }
+
+                <li class="page-item">
+                    <a class="page-link" id="@("end-"+@Model.PageCount)" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+
+
+    <table class="table table-striped" ">
+        <thead>
+            <tr>
+                <th>Konu Başlığı</th>
+                <th>Konu tarihi</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+    </table>
+
+    @Html.Partial("~/Views/Partial/SubjectAddModal.cshtml")
+
+
+
+</div>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        PageClick(1);
+        $(document).on('show.bs.collapse', ".cell-1", function() {
+            var SubjectId = $(this).attr('id').split('-')[1];
+            $.get("Home/GetAnswer/" + SubjectId, function(dataPartial) {
+                $('#collapseme-' + SubjectId).html(dataPartial);
+            });
+        });
+        $(".page-link").click(function() {
+            var index = $(this).attr('id').split('-')[1];
+            $(".page-link").css("background-color", "#ffffff");
+            this.style.backgroundColor = "#458dd9";
+            $.get("Home/GetSubjectPartial/" + index, function(dataPartial) {
+                $('#table-body').html(dataPartial);
+            });
+        });
+
+        $("#answerBtn").click(function() {
+            var index = $(this).attr('id').split('-')[1];
+            $(".page-link").css("background-color", "#ffffff");
+            this.style.backgroundColor = "#458dd9";
+
+            let data = {
+                Name:$("#Name").val(),
+                Surname:$("#Surname").val(),
+                Email:$("#Email").val(),
+                Content:$("#Content").val(),
+                SubjectId:$("#SubjectId").val(),
+            }
+
+            $.post("Home/AnswersAdds/",data,function(dataPartial) {
+                $('#collapseme-' + data.SubjectId).html(dataPartial);
+            });
+        });
+
+    });
+
+    function PageClick(index) {
+        console.log(index);
+        $.get("Home/GetSubjectPartial/" + index, function(dataPartial) {
+            $('#table-body').html(dataPartial);
+        });
+    }
+
+</script>
