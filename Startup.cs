@@ -1,15 +1,9 @@
-using Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using RabbitMQService;
 
 namespace WorkFollow
 {
@@ -26,12 +20,8 @@ namespace WorkFollow
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            //Bind<ISubjectService>().To<SubjectManager>().InSingletonScope().WithConstructorArgument(new SubjectDal());
-
-            //Bind<ISubjectDal>().To<SubjectDal>();
-
-            //Bind<IAnswerService>().To<AnswerManager>().InSingletonScope().WithConstructorArgument(new AnswerDal());
-            //Bind<IAnswerDal>().To<AnswerDal>();
+            services.AddHostedService<ConsumerAnswerBackgroundService>();
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

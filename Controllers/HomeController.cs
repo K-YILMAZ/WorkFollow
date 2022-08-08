@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Concrete.Answer;
+using Business.Concrete.DependencyResolvers.Ninject;
 using Business.Concrete.Subject;
 using Data.Abstract;
 using Data.Concrete;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Ninject;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,29 +20,28 @@ namespace WorkFollow.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private ISubjectService _subjectService = new SubjectManager(new SubjectDal());
-        private IAnswerService _answerService = new AnswerManager(new AnswerDal());
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
+      
         public IActionResult Index()
         {
-            var a = SubjectUIHelper.GetPagenation(_subjectService, 1);
+            var a = SubjectUIHelper.GetPagenation(1);
             return View(a);
         }
 
         [HttpPost]
         public IActionResult Index(int CurrentPage)
         {
-            return View(SubjectUIHelper.GetAll(_subjectService, CurrentPage));
+            return View(SubjectUIHelper.GetAll(CurrentPage));
         }
 
         [HttpPost]
         [AllowAnonymous]
         public ActionResult SubjectAdds(IFormCollection keys)
         {
-            if (SubjectUIHelper.Add(keys, _subjectService))
+            if (SubjectUIHelper.Add(keys))
             {
 
             }
@@ -52,13 +53,13 @@ namespace WorkFollow.Controllers
         public PartialViewResult GetSubjectPartial(long id)
         {
             id = id == 0 ? 11 : id;
-            return PartialView("~/Views/Partial/SubjectsPartial.cshtml", SubjectUIHelper.GetAll(_subjectService, id));
+            return PartialView("~/Views/Partial/SubjectsPartial.cshtml", SubjectUIHelper.GetAll(id));
         }
 
         public PartialViewResult GetAnswer(long id)
         {
-            List<AnswerEntities> answerEntities = AnswerUIHelper.GetAll(_answerService, id);
-            if (AnswerUIHelper.GetAll(_answerService, id).Count == 0)
+            List<AnswerEntities> answerEntities = AnswerUIHelper.GetAll(id);
+            if (AnswerUIHelper.GetAll(id).Count == 0)
             {
                 answerEntities = new List<AnswerEntities> { new AnswerEntities { SubjectId = id } };
             }
@@ -71,7 +72,7 @@ namespace WorkFollow.Controllers
         public PartialViewResult AnswersAdds(AnswerEntities answerEntities)
         {
             answerEntities.Date = DateTime.Now;
-            AnswerUIHelper.Add(answerEntities, _answerService);
+            AnswerUIHelper.Add(answerEntities);
 
             return GetAnswer(answerEntities.SubjectId);
 

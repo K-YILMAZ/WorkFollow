@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Concrete.DependencyResolvers.Ninject;
 using Business.Concrete.Subject;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -10,26 +11,25 @@ namespace WorkFollow.Content
 {
     public static class SubjectUIHelper
     {
-        public static List<SubjectEntities> GetAll(ISubjectService subjectService, long pageIndex)
+        public static List<SubjectEntities> GetAll(long pageIndex)
         {
-            var data = subjectService.GetAll("Select * From Subjects order by Id desc Offset " + (5 * (pageIndex - 1)) + " Rows fetch next " + 5 + " rows only Select Count(*) as totalcount from Subjects");
+            var data = SubjectHelper.GetAll("Select * From Subjects order by Id desc Offset " + (5 * (pageIndex - 1)) + " Rows fetch next " + 5 + " rows only Select Count(*) as totalcount from Subjects");
 
             var convertData = System.Text.Json.JsonSerializer.Serialize(data);
             return JsonConvert.DeserializeObject<List<SubjectEntities>>(convertData);
         }
 
-        public static Pagenation GetPagenation(ISubjectService subjectService, int pageIndex)
+        public static Pagenation GetPagenation(int pageIndex)
         {
-            long dataCount = subjectService.GetAllCount("Select Count(*) from Subjects");
+            long dataCount = InstanceFactory.GetInstance<ISubjectService>().GetAllCount("Select Count(*) from Subjects");
             return new Models.Pagenation
             {
                 CurrentIndex = pageIndex,
                 PageCount = Convert.ToInt32(dataCount) / 5
-
             };
         }
 
-        public static bool Add(IFormCollection keys, ISubjectService subjectService)
+        public static bool Add(IFormCollection keys)
         {
             SubjectEntities subjectEntities = new SubjectEntities
             {
@@ -40,7 +40,7 @@ namespace WorkFollow.Content
                 Surname = keys["Surname"],
                 Title = keys["Title"]
             };
-            return SubjectHelper.Add(System.Text.Json.JsonSerializer.Serialize(subjectEntities), subjectService);
+            return SubjectHelper.Add(System.Text.Json.JsonSerializer.Serialize(subjectEntities));
         }
     }
 }

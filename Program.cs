@@ -1,12 +1,13 @@
+using Business.Abstract;
+using Business.Concrete.Answer;
 using Business.Concrete.DependencyResolvers.Ninject;
+using Business.Concrete.Subject;
+using Data.Abstract;
+using Data.Concrete;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Ninject;
+using System.Reflection;
 
 namespace WorkFollow
 {
@@ -22,6 +23,7 @@ namespace WorkFollow
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                  
                 });
     }
 }

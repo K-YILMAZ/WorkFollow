@@ -12,18 +12,18 @@ namespace WorkFollow.Content
 {
     public static class AnswerUIHelper
     {
-        public static List<AnswerEntities> GetAll(IAnswerService answerService, long SubjectId)
+        public static List<AnswerEntities> GetAll(long SubjectId)
         {
-            var data = answerService.GetAll("Select * From Answers Where SubjectId=" + SubjectId);
+            var data = AnswerHelper.GetAll("Select * From Answers Where SubjectId=" + SubjectId);
             var convertData = System.Text.Json.JsonSerializer.Serialize(data);
             return JsonConvert.DeserializeObject<List<AnswerEntities>>(convertData);
         }
 
-        public static bool Add(AnswerEntities answerEntities, IAnswerService answerService)
+        public static bool Add(AnswerEntities answerEntities)
         {
                 var data = System.Text.Json.JsonSerializer.Serialize(answerEntities);
 
-                return AnswerHelper.Add(data, answerService);
+                return AnswerHelper.Add(data);
         }
     }
 }
